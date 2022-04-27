@@ -1,3 +1,5 @@
+:- module(TDA_card, [isInCard/2, card/2, emptyCard/1, firstElement/2, nextElements/2, addElement/3, commonElements/3, oneCommonElement/2]).
+
 isInCard(E, [E | _]).
 isInCard(E, [_ | NextElem]):-isInCard(E, NextElem), !.
 
@@ -9,15 +11,11 @@ firstElement([F | _], F).
 
 nextElements([_ | N], N).
 
-addElement(C, E, [E | C]).
-
-
-
-isInCardValue(E, C, R):- isInCard(E, C), R is 1.
-isInCardValue(E, C, R):- not(isInCard(E, C)), R is 0.
+addElement(C, E, [E | C]):- not(isInCard(E, C)).
 
 commonElements([], _, 0):-!.
 commonElements(_, [], 0):-!.
-commonElements(C1, C2, R):- firstElement(C1, E1), nextElements(C1, CSub1), commonElements(CSub1, C2, R1), isInCardValue(E1, C2, R2), R is R1 + R2, !.
+commonElements([E1 | C1], C2, R):-commonElements(C1, C2, R1), isInCard(E1, C2), R is R1 + 1, !.
+commonElements([_ | C1], C2, R):-commonElements(C1, C2, R).
 
 oneCommonElement(C1, C2):- commonElements(C1, C2, R), R = 1.
