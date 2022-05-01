@@ -1,4 +1,3 @@
-% :- module(main).
 :- ['tda_cardsSet.pl'].
 :- use_module(tda_cardsSet).
 
@@ -12,3 +11,7 @@ cardsSetNthCard([C | _], -1, C):-!.
 cardsSetNthCard([_ | CS], N, C):-NewN is N - 1, cardsSetNthCard(CS, NewN, C).
 
 cardsSetFindTotalCards(C, TotalCards):- numECardsSet([C], NumE), totalCardsNumE(NumE, TotalCards).
+
+cardsSetMissingCards([Elements | CSin], CSout):-numECardsSet(CSin, NumE), totalCardsNumE(NumE, TotalCards), cardsLength(CSin, R), MaxC is TotalCards - R, cardsSetAux(Elements, NumE, MaxC, CSin, FullCS), subtract(FullCS, CSin, CSout).
+
+cardsSetToString([Elements | CS], String):-cardsToString(CS, 1, String).

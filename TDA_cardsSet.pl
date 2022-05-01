@@ -1,8 +1,4 @@
-% :- ensure_loaded(TDA_card).
-% :- use_module(TDA_card).
-:- module(tda_cardsSet, [emptyCardSet/1, firstCard/2, nextCards/2, addCard/3, numECardsSet/2, maxOneCommonElementCardsSet/2, elementAppearances/3, totalCardsNumE/2, cardsSetAux/5, createValidCard/5, firstCardGeneration/4, nCardsGeneration/6, n2CardsGeneration/7, elementsAppearancesCondition/3, maxOneCommonElementAll/1]).
-% :- module(TDA_cardsSet).
-% :- module(tda_cardsSet, [isInCard/2, card/2, emptyCard/1, firstElement/2, nextElements/2, addElement/3, commonElements/3, oneCommonElement/2]).
+:- module(tda_cardsSet, [emptyCardSet/1, firstCard/2, nextCards/2, addCard/3, cardsLength/2, numECardsSet/2, maxOneCommonElementCardsSet/2, elementAppearances/3, totalCardsNumE/2, cardsSetAux/5, createValidCard/5, firstCardGeneration/4, nCardsGeneration/6, n2CardsGeneration/7, elementsAppearancesCondition/3, maxOneCommonElementAll/1, cardsToString/3]).
 :- ['TDA_card.pl'].
 :- use_module(tda_card).
 
@@ -14,7 +10,10 @@ nextCards([_ | N], N).
 
 addCard(Cset, C, [C | Cset]).
 
-numECardsSet(CS, NumE):-firstCard(CS, C), cardLenght(C, NumE).
+cardsLength([], 0).
+cardsLength([_ | Cs], R):- cardsLength(Cs, R2), R is R2 + 1.
+
+numECardsSet(CS, NumE):-firstCard(CS, C), cardLength(C, NumE).
 
 maxOneCommonElementCardsSet(_, []):-!.
 maxOneCommonElementCardsSet(C, [C2 | SubCset]):- commonElements(C, C2, R), R =< 1, maxOneCommonElementCardsSet(C, SubCset).
@@ -25,10 +24,10 @@ elementAppearances(E, [_ | SubCset], R):- elementAppearances(E, SubCset, R).
 
 totalCardsNumE(NumE, R):- R is NumE * NumE - NumE + 1.
 
-cardsSetAux(_, _, 0, CSin, CSout):- CSin = CSout, !.
+cardsSetAux(_, _, 0, CSin, CSin):- !.
 cardsSetAux(Es, NumE, MaxC, CSin, CSout):- createValidCard(Es, NumE, CSin, [], C), cardLength(C, NumE), NewMaxC is MaxC - 1, cardsSetAux(Es, NumE, NewMaxC, [C | CSin], CSout), !.
 
-createValidCard(_, NumE, _, Cin, Cout):- cardLength(Cin, NumE), Cout = Cin, !.
+createValidCard(_, NumE, _, Cin, Cin):- cardLength(Cin, NumE), !.
 createValidCard(Es, NumE, _, Cin, _):- cardLength(Cin, R), cardLength(Es, R1), R1 < R - NumE, !.
 createValidCard([E | Es], NumE, CS, Cin, Cout):-elementAppearances(E, CS, R), R < NumE, maxOneCommonElementCardsSet([E | Cin], CS), createValidCard(Es, NumE, CS, [E | Cin], Cout).
 createValidCard([_ | Es], NumE, CS, Cin, Cout):-createValidCard(Es, NumE, CS, Cin, Cout).
@@ -63,3 +62,6 @@ elementsAppearancesCondition([E | Es], CS, NumE):-elementAppearances(E, CS, R), 
 
 maxOneCommonElementAll([]).
 maxOneCommonElementAll([C | CS]):- maxOneCommonElementCardsSet(C, CS), maxOneCommonElementAll(CS).
+
+cardsToString([], _, ""):-!.
+cardsToString([C | CS], I, Str):-cardToString(C, I, S1), string_concat(S1, '\n', S2), NewI is I + 1, cardsToString(CS, NewI, S3), string_concat(S2, S3, Str).

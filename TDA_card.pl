@@ -1,4 +1,4 @@
-:- module(tda_card, [isInCard/2, card/2, emptyCard/1, firstElement/2, nextElements/2, addElement/3, commonElements/3, oneCommonElement/2, cardLenght/2]).
+:- module(tda_card, [isInCard/2, card/2, emptyCard/1, firstElement/2, nextElements/2, addElement/3, commonElements/3, oneCommonElement/2, cardLength/2, cardToString/3]).
 
 isInCard(E, [E | _]):-!.
 isInCard(E, [_ | NextElem]):-isInCard(E, NextElem).
@@ -20,5 +20,7 @@ commonElements([_ | C1], C2, R):-commonElements(C1, C2, R).
 
 oneCommonElement(C1, C2):- commonElements(C1, C2, R), R = 1.
 
-cardLenght([], 0).
-cardLenght([_ | Es], R):- cardLenght(Es, R2), R is R2 + 1.
+cardLength([], 0).
+cardLength([_ | Es], R):- cardLength(Es, R2), R is R2 + 1.
+
+cardToString(C, I, S):-atomics_to_string(C, ', ', ES), number_string(I, IS), string_concat('card n', IS, CNS), string_concat(CNS, ': ', CNS2), string_concat(CNS2, ES, S).
