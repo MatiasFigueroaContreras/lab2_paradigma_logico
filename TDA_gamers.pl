@@ -5,7 +5,7 @@ emptyGamers([]).
 isGamer(Nick, [Nick | _]):-!.
 isGamer(Nick, [_ | Gs]):-isGamer(Nick, Gs), !.
 
-registerGamer(Nick, Gsin, Gsin):-isGamer(Nick, Gsin), !.
+registerGamer(Nick, Gsin, Gsout):-var(Gsout), isGamer(Nick, Gsin), Gsout is Gsin, !.
 registerGamer(Nick, Gsin, Gsout):-registerGamerAux(Nick, Gsin, Gsout), !.
 
 registerGamerAux(Nick, [], [Nick]):-!.
