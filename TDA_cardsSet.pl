@@ -51,7 +51,7 @@ n2CardGeneration(_, NumE, _, _, NumE, Cin, Cin):-!.
 n2CardGeneration(Es, NumE, I, J, K, Cin, Cout):-N is NumE-1, Nth is (N+2+N*(K-1) + (((I-1)*(K-1)+J-1) mod N)), nth1(Nth, Es, E), NewK is K + 1, n2CardGeneration(Es, NumE, I, J, NewK, [E | Cin], Cout), !.
 
 
-n2CardsGeneration(_, _, _, _, 0, CSin, CSin):-!.
+n2CardsGeneration(_, _, _, _, MaxC, CSin, CSin):- MaxC =< 0, !.
 n2CardsGeneration(_, NumE, NumE, _, _, CSin, CSin):-!.
 n2CardsGeneration(Es, NumE, I, NumE, MaxC, CSin, CSout):- NewI is I + 1, n2CardsGeneration(Es, NumE, NewI, 1, MaxC, CSin, CSout), !.
 n2CardsGeneration(Es, NumE, I, J, MaxC, CSin, CSout):-Nth is I + 1, nth1(Nth, Es, E), n2CardGeneration(Es, NumE, I, J, 1, [E], Cout), NewJ is J + 1, NewMaxC is MaxC - 1, n2CardsGeneration(Es, NumE, I, NewJ, NewMaxC, [Cout | CSin], CSout).

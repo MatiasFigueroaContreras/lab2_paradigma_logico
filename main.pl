@@ -22,4 +22,16 @@ dobbleGame(NumP, CS, Mode, Seed, [GsI, [[], CS], "esperando cartas en mesa", Mod
 dobbleGameRegister(User, [GsI_in, GArea, Status, Mode, Seed], [GsI_out, GArea, Status, Mode, Seed]):- not(var(GsI_in)), totalRegisteredGamers(GsI_in, T), maxPlayersToRegist(GsI_in, MaxP), T \= MaxP, newGamer(User, GsI_in, GsI_out), !.
 dobbleGameRegister(User, [GsI_in, GArea, Status, Mode, Seed], [GsI_out, GArea, Status, Mode, Seed]):- var(GsI_in), newGamer(User, GsI_in, GsI_out).
 
-dobbleGameWhoseTurnIsIt([GsI, GArea, Status, Mode, Seed], UserName):- getGamerTurn(GsI, UserName).
+dobbleGameWhoseTurnIsIt([GsI, _, _, _, _], UserName):- getGamerTurn(GsI, UserName).
+
+% dobbleGamePlay([GsI, GArea, Status, Mode, Seed], Action, GameOut).
+
+dobbleGameStatus([_, _, Status | _], Status).
+
+dobbleGameScore([GsI | _], UserName, Score):- getGamerScore(UserName, GsI, Score).
+
+dobbleGameToString([GsI, _, 'terminado', Mode, _], String):- gamersInfoToString(GsI, GsIStr), winnersLosersToString(GsI, WLS),  atomics_to_string(['Estado del juego: Terminado', '\nModo de juego: ', Mode, '\n----', WLS, '\n----\n', GsIStr], '', String), !.
+
+dobbleGameToString([GsI, GArea, 'cartas en mesa', Mode, _], String):-gamersInfoToString(GsI, GsIStr), atomics_to_string(['Estado del juego: Cartas en mesa', '\nModo de juego: ', Mode, 'Cartas en juego: ', '--', '\n', GsIStr], '', String), !.
+
+dobbleGameToString([GsI, _, Status, Mode, _], String):-gamersInfoToString(GsI, GsIStr), atomics_to_string(['Estado del juego: ', Status,'\nModo de juego: ', Mode, '\n', GsIStr], '', String), !.

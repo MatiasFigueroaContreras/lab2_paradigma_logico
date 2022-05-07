@@ -1,4 +1,4 @@
-:-module(tda_gamersInfo, [initGamersInfo/2, getGamerScore/3, getGamerTurn/2, maxPlayersToRegist/2, totalRegisteredGamers/2, nextTurn/2, newGamer/3, addScore/3, getWinners/2, getLosers/2]).
+:-module(tda_gamersInfo, [initGamersInfo/2, getGamerScore/3, getGamerTurn/2, maxPlayersToRegist/2, totalRegisteredGamers/2, nextTurn/2, newGamer/3, addScore/3, getWinners/2, getLosers/2, winnersLosersToString/2, gamersInfoToString/2]).
 :-['TDA_gamers.pl'], ['TDA_gamersPoints.pl'].
 :-use_module(tda_gamers), use_module(tda_gamersPoints).
 
@@ -26,3 +26,11 @@ getWinnersAux(MaxScore, [G | Gs], [MaxScore | GPs], Gin, Gout):-getWinnersAux(Ma
 getWinnersAux(MaxScore, [_ | Gs], [_ | GPs], Gin, Gout):-getWinnersAux(MaxScore, Gs, GPs, Gin, Gout), !.
 
 getLosers([_, _, Gs, GPs], Losers):-getWinners([_, _, Gs, GPs], Winners), subtract(Gs, Winners, Losers).
+
+winnersLosersToString(GsI, Str):- getWinners(GsI, W), getLosers(GsI, []), atomics_to_string(W, ', ', WS), atomics_to_string(['\nResultados:\n-Ganadores:\n  ', WS, '\n-No hay perdedores.'], '', Str), !.
+winnersLosersToString(GsI, Str):- getWinners(GsI, W), getLosers(GsI, L), atomics_to_string(W, ', ', WS), atomics_to_string(L, ', ', LS), atomics_to_string(['\nResultados:\n-Ganadores:\n  ', WS, '\n-Perdedores:\n  ', LS], '', Str).
+
+gamersNamesPointsToString([_, _, [], []], _, StrConst, StrConst).
+gamersNamesPointsToString([_, _, [G | Gs], [GP | GPs]], I, StrConst, StrOut):- atomics_to_string([StrConst, 'Jugador n', I, ': ', G, ', Puntaje: ', GP, '\n'], '', NewStrConst), NewI is I + 1, gamersNamesPointsToString([_, _, Gs, GPs], NewI, NewStrConst, StrOut).
+
+gamersInfoToString([NumG, Turn, Gs, GPs], String):-gamersNamesPointsToString([NumG, Turn, Gs, GPs], 1, "", GNP), totalRegisteredGamers([NumG, Turn, Gs, GPs], Tot), atomics_to_string(['Maximos jugadores en el juego: ', NumG, '\nNumero de jugadores Registrados: ', Tot, '\nTurno del jugador: n', Turn, '\nJugadores Registrados:\n', GNP], '', String).
