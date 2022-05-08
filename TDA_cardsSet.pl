@@ -1,12 +1,12 @@
-:- module(tda_cardsSet, [emptyCardSet/1, firstCard/2, nextCards/2, addCard/3, cardsLength/2, numECardsSet/2, maxOneCommonElementCardsSet/2, elementAppearances/3, totalCardsNumE/2, cardsSetAux/5, createValidCard/5, firstCardGeneration/4, nCardsGeneration/6, n2CardsGeneration/7, elementsAppearancesCondition/3, maxOneCommonElementAll/1, cardsToString/3]).
+:- module(tda_cardsSet, [emptyCardSet/1, firstCard/2, nextCards/2, addCard/3, cardsLength/2, numECardsSet/2, maxOneCommonElementCardsSet/2, elementAppearances/3, cardsSetAux/5, createValidCard/5, firstCardGeneration/4, nCardsGeneration/6, n2CardsGeneration/7, elementsAppearancesCondition/3, maxOneCommonElementAll/1, cardsToString/3]).
 :- ['TDA_card.pl'].
 :- use_module(tda_card).
 
 emptyCardSet([]).
 
-firstCard([F | _], F).
+firstCard([_, [F | _]], F).
 
-nextCards([_ | N], N).
+nextCards([Es, [_ | N]], [Es, N]).
 
 addCard(Cset, C, [C | Cset]).
 
@@ -21,8 +21,6 @@ maxOneCommonElementCardsSet(C, [C2 | SubCset]):- commonElements(C, C2, R), R =< 
 elementAppearances(_, [], 0):-!.
 elementAppearances(E, [C1 | SubCset], R):- elementAppearances(E, SubCset, R1), isInCard(E, C1), R is R1 + 1, !.
 elementAppearances(E, [_ | SubCset], R):- elementAppearances(E, SubCset, R).
-
-totalCardsNumE(NumE, R):- R is NumE * NumE - NumE + 1.
 
 cardsSetAux(_, _, 0, CSin, CSin):- !.
 cardsSetAux(Es, NumE, MaxC, CSin, CSout):- createValidCard(Es, NumE, CSin, [], C), cardLength(C, NumE), NewMaxC is MaxC - 1, cardsSetAux(Es, NumE, NewMaxC, [C | CSin], CSout), !.
