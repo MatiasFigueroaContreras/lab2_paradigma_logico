@@ -15,10 +15,13 @@ totalRegisteredGamers([_,_, Gs,_], T):-totalGamers(Gs, T).
 setGamerTurn(Gamer, [NumG, _, Gs, GPs], [NumG, Turn, Gs, GPs]):-gamerPos(Gamer, Gs, Turn).
 
 nextTurn([NumG, Turn, Gs, GPs], [NumG, 1, Gs, GPs]):- totalGamers(Gs, Turn), !.
-nextTurn([NumG, Turn, Gs, GPs], [NumG, 1, Gs, GPs]):- totalGamers(Gs, 0), !.
+nextTurn([NumG, _, Gs, GPs], [NumG, 1, Gs, GPs]):- totalGamers(Gs, 0), !.
 nextTurn([NumG, Turn, Gs, GPs], [NumG, NewTurn, Gs, GPs]):- NewTurn is Turn + 1.
 
-newGamer(Nick, [NumG, Turn, Gs, GPs], [NumG, Turn, NewGs, NewGPs]):- registerGamer(Nick, Gs, NewGs), NewGs \= Gs, registerNewGamerPoint(GPs, NewGPs).
+newGamer(Nick, [NumG, Turn, Gs, GPs], [NumG, Turn, NewGs, NewGPs]):- 
+    registerGamer(Nick, Gs, NewGs), 
+    NewGs \= Gs, 
+    registerNewGamerPoint(GPs, NewGPs).
 
 addScore(ScoreAdd, [NumG, Turn, Gs, GPs], [NumG, Turn, Gs, NewGPs]):- addPoints(Turn, ScoreAdd, GPs, NewGPs).
 
@@ -30,10 +33,22 @@ getWinnersAux(MaxScore, [_ | Gs], [_ | GPs], Gin, Gout):-getWinnersAux(MaxScore,
 
 getLosers([_, _, Gs, GPs], Losers):-getWinners([_, _, Gs, GPs], Winners), subtract(Gs, Winners, Losers).
 
-winnersLosersToString(GsI, Str):- getWinners(GsI, W), getLosers(GsI, []), atomics_to_string(W, ', ', WS), atomics_to_string(['\nResultados:\n-Ganadores:\n  ', WS, '\n-No hay perdedores.'], '', Str), !.
-winnersLosersToString(GsI, Str):- getWinners(GsI, W), getLosers(GsI, L), atomics_to_string(W, ', ', WS), atomics_to_string(L, ', ', LS), atomics_to_string(['\nResultados:\n-Ganadores:\n  ', WS, '\n-Perdedores:\n  ', LS], '', Str).
+winnersLosersToString(GsI, Str):- 
+    getWinners(GsI, W), 
+    getLosers(GsI, []), 
+    atomics_to_string(W, ', ', WS), atomics_to_string(['\nResultados:\n-Ganadores:\n  ', WS, '\n-No hay perdedores.'], '', Str), !.
+winnersLosersToString(GsI, Str):- 
+    getWinners(GsI, W), 
+    getLosers(GsI, L), 
+    atomics_to_string(W, ', ', WS), atomics_to_string(L, ', ', LS), atomics_to_string(['\nResultados:\n-Ganadores:\n  ', WS, '\n-Perdedores:\n  ', LS], '', Str).
 
 gamersNamesPointsToString([_, _, [], []], _, StrConst, StrConst).
-gamersNamesPointsToString([_, _, [G | Gs], [GP | GPs]], I, StrConst, StrOut):- atomics_to_string([StrConst, 'Jugador n', I, ': ', G, ', Puntaje: ', GP, '\n'], '', NewStrConst), NewI is I + 1, gamersNamesPointsToString([_, _, Gs, GPs], NewI, NewStrConst, StrOut).
+gamersNamesPointsToString([_, _, [G | Gs], [GP | GPs]], I, StrConst, StrOut):- 
+    atomics_to_string([StrConst, 'Jugador n', I, ': ', G, ', Puntaje: ', GP, '\n'], '', NewStrConst), 
+    NewI is I + 1, 
+    gamersNamesPointsToString([_, _, Gs, GPs], NewI, NewStrConst, StrOut).
 
-gamersInfoToString([NumG, Turn, Gs, GPs], String):-gamersNamesPointsToString([NumG, Turn, Gs, GPs], 1, "", GNP), totalRegisteredGamers([NumG, Turn, Gs, GPs], Tot), atomics_to_string(['Maximos jugadores en el juego: ', NumG, '\nNumero de jugadores Registrados: ', Tot, '\nTurno del jugador: n', Turn, '\nJugadores Registrados:\n', GNP], '', String).
+gamersInfoToString([NumG, Turn, Gs, GPs], String):-
+    gamersNamesPointsToString([NumG, Turn, Gs, GPs], 1, "", GNP), 
+    totalRegisteredGamers([NumG, Turn, Gs, GPs], Tot), 
+    atomics_to_string(['Maximos jugadores en el juego: ', NumG, '\nNumero de jugadores Registrados: ', Tot, '\nTurno del jugador: n', Turn, '\nJugadores Registrados:\n', GNP], '', String).

@@ -11,4 +11,10 @@ getBackCardsInPlay([CsP, CS], GA):-union(CS, CsP, CSout), withdrawCardsInPlay([C
 
 cardsInPlayLength([CsP, _], Length):-cardsLength(CsP, Length).
 
-modeSetCardsInPlay([CsP, CS], 'stack', [NewCsP, NewCS]):-firstCard(CS, C1), nextCards(CS, CS2), firstCard(CS2, C2), nextCards(CS2, NewCS), addCard(CsP, C1, CsP2), addCard(CsP2, C2, NewCsP).
+modeSetCardsInPlay([CsP, CS], 'stack', [NewCsP, NewCS]):-
+    firstCard(CS, C1), 
+    nextCards(CS, CS2), 
+    firstCard(CS2, C2), 
+    nextCards(CS2, NewCS), 
+    addCard(CsP, C1, CsP2), 
+    addCard(CsP2, C2, NewCsP).
