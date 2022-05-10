@@ -1,8 +1,6 @@
-:- module(tda_cardsSet, [emptyCardSet/1, firstCard/2, nextCards/2, addCard/3, cardsLength/2, numECardsSet/2, maxOneCommonElementCardsSet/2, elementAppearances/3, elementsAppearancesList/3, cardsSetAux/6, createValidCard/6, firstCardGeneration/4, nCardsGeneration/6, n2CardsGeneration/7, elementsAppearancesCondition/3, maxOneCommonElementAll/1, cardsToString/3, splitCards/6, mixCards/2, mixCardsSetXtimes/3, subtractCards/3, subsetCards/2]).
+:- module(tda_cardsSet, [firstCard/2, nextCards/2, addCard/3, cardsLength/2, numECardsSet/2, maxOneCommonElementCardsSet/2, elementAppearances/3, elementsAppearancesList/3, cardsSetAux/6, createValidCard/6, firstCardGeneration/4, nCardsGeneration/6, n2CardsGeneration/7, elementsAppearancesCondition/3, maxOneCommonElementAll/1, cardsToString/3, splitCards/6, mixCards/2, mixCardsSetXtimes/3, subtractCards/3, subsetCards/2]).
 :- ['TDA_card.pl'].
 :- use_module(tda_card).
-
-emptyCardSet([]).
 
 firstCard([_, [F | _]], F).
 
@@ -70,9 +68,6 @@ nCardsGeneration([E | Es], NumE, I, MaxC, CSin, CSout):-
     nCardsGeneration([E | Es], NumE, NewI, NewMaxC, [Cout | CSin], CSout).
 
 
-
-%n2CardGeneration(Elements, NumE, I, J, K, Cin, Cout)
-%n2CardsGeneration(Elements, NumE, I, J, MaxC, Cin, Cout)
 n2CardGeneration(_, NumE, _, _, NumE, Cin, Cin):-!.
 n2CardGeneration(Es, NumE, I, J, K, Cin, Cout):-
     N is NumE-1, 
