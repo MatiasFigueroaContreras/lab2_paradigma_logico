@@ -1,1 +1,1 @@
-# lab2_20945996_Figueroa
+LAB 2 Paradigmas de Programacion | Paradigma Logico | Prolog
